@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Image → PES Embroidery Converter</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12c3-6 6-6 9 0s6 6 9 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2.2"/><circle cx="21" cy="12" r="1.6" fill="currentColor"/></svg>
+      <span>Image → PES</span>
+      <small>embroidery digitizer</small>
+    </div>
+    <div class="top-actions">
+      <span id="status" class="status">Load an image to begin</span>
+      <button id="downloadBtn" class="primary" disabled>
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download .pes
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <section class="panel">
+        <h2>Image</h2>
+        <label id="drop" class="drop">
+          <input id="file" type="file" accept="image/png,image/jpeg,image/svg+xml,.svg,image/webp,image/gif,image/bmp" hidden>
+          <div class="drop-inner">
+            <img id="thumb" alt="" hidden>
+            <div id="dropText"><strong>Drop a PNG, JPEG or SVG</strong><br><span>or click to browse</span></div>
+          </div>
+        </label>
+        <p class="hint">Works best with logos, clip-art and drawings with clear, flat colours. SVGs give the cleanest edges. Photos are posterised.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Size</h2>
+        <div class="row2">
+          <label>Width <span class="unit">mm</span><input id="widthMM" type="number" min="10" max="400" step="1" value="100"></label>
+          <label>Height <span class="unit">mm</span><input id="heightMM" type="number" min="10" max="400" step="1" value="100"></label>
+        </div>
+        <label>Hoop
+          <select id="hoop">
+            <option value="100x100">4 × 4 in (100 × 100 mm)</option>
+            <option value="130x180" selected>5 × 7 in (130 × 180 mm)</option>
+            <option value="160x260">6 × 10 in (160 × 260 mm)</option>
+            <option value="200x200">8 × 8 in (200 × 200 mm)</option>
+            <option value="200x300">8 × 12 in (200 × 300 mm)</option>
+            <option value="240x360">9.5 × 14 in (240 × 360 mm)</option>
+          </select>
+        </label>
+        <p id="hoopWarn" class="warn" hidden></p>
+      </section>
+
+      <section class="panel">
+        <h2>Colours</h2>
+        <label class="slider">Maximum colours (thread changes) <output id="colorsOut">6</output>
+          <input id="colors" type="range" min="1" max="12" value="6"></label>
+        <label class="slider">Merge colours closer than <output id="mergeSimilarOut">10 ΔE</output>
+          <input id="mergeSimilar" type="range" min="0" max="25" step="1" value="10"></label>
+        <label class="check"><input id="foldTinyColors" type="checkbox" checked> Fold tiny similar colours into neighbours</label>
+        <label class="check"><input id="mergeBlends" type="checkbox" checked> Merge edge-blend colours (anti-aliasing)</label>
+        <label>Background
+          <select id="background">
+            <option value="outside">Remove surrounding background (keep enclosed areas, e.g. eyes)</option>
+            <option value="all">Remove every pixel of the background colour</option>
+            <option value="keep">Stitch the background too</option>
+          </select>
+        </label>
+        <label class="check"><input id="snapToThreads" type="checkbox" checked> Snap to Brother thread chart</label>
+        <label class="slider">Edge smoothing <output id="smoothingOut">3</output>
+          <input id="smoothing" type="range" min="0" max="8" value="3"></label>
+        <label class="slider">Drop details smaller than <output id="minRegionOut">0.6 mm²</output>
+          <input id="minRegion" type="range" min="0.1" max="10" step="0.1" value="0.6"></label>
+        <div id="colorList" class="color-list"></div>
+      </section>
+
+      <details class="panel" open>
+        <summary><h2>Fill stitch</h2></summary>
+        <label class="slider">Density (row spacing) <output id="spacingOut">0.42 mm</output>
+          <input id="spacing" type="range" min="0.25" max="1.0" step="0.01" value="0.42"></label>
+        <label class="slider">Stitch length <output id="stitchLengthOut">3.5 mm</output>
+          <input id="stitchLength" type="range" min="1.5" max="7" step="0.1" value="3.5"></label>
+        <label class="slider">Fill angle <output id="angleOut">45°</output>
+          <input id="angle" type="range" min="0" max="179" step="1" value="45"></label>
+        <label class="check"><input id="autoAngle" type="checkbox" checked> Optimise angle per shape (fewer travels)</label>
+        <label>Tatami pattern
+          <select id="pattern">
+            <option value="tatami">Classic tatami (¼ offset)</option>
+            <option value="smooth">Smooth (hides lines)</option>
+            <option value="brick">Brick (½ offset)</option>
+            <option value="twill">Twill (⅓ offset)</option>
+            <option value="random">Random</option>
+          </select>
+        </label>
+        <label>Underlay
+          <select id="underlay">
+            <option value="both">Edge walk + cross-hatch</option>
+            <option value="fill">Cross-hatch only</option>
+            <option value="edge">Edge walk only</option>
+            <option value="none">None</option>
+          </select>
+        </label>
+        <label class="slider">Pull compensation <output id="pullCompOut">0.15 mm</output>
+          <input id="pullComp" type="range" min="0" max="0.8" step="0.05" value="0.15"></label>
+        <label class="slider">Colour overlap <output id="overlapOut">0.25 mm</output>
+          <input id="overlap" type="range" min="0" max="0.8" step="0.05" value="0.25"></label>
+      </details>
+
+      <details class="panel" open>
+        <summary><h2>Satin stitch</h2></summary>
+        <label class="check"><input id="satin" type="checkbox" checked> Use satin for narrow shapes</label>
+        <label class="slider">Satin when narrower than <output id="satinMaxOut">5.5 mm</output>
+          <input id="satinMax" type="range" min="1.5" max="8" step="0.1" value="5.5"></label>
+        <label class="slider">Satin density <output id="satinSpacingOut">0.40 mm</output>
+          <input id="satinSpacing" type="range" min="0.25" max="0.8" step="0.01" value="0.4"></label>
+        <label>Satin underlay
+          <select id="satinUnderlay">
+            <option value="auto">Auto (centre walk / zig-zag)</option>
+            <option value="center">Centre walk</option>
+            <option value="zigzag">Zig-zag</option>
+            <option value="none">None</option>
+          </select>
+        </label>
+        <label class="check"><input id="shortStitch" type="checkbox" checked> Short stitches on tight curves</label>
+      </details>
+
+      <details class="panel">
+        <summary><h2>Machine</h2></summary>
+        <label class="slider">Trim jumps longer than <output id="trimDistanceOut">1.0 mm</output>
+          <input id="trimDistance" type="range" min="0.5" max="10" step="0.5" value="1"></label>
+        <label class="check"><input id="ties" type="checkbox" checked> Lock (tie) stitches at start/end</label>
+        <button id="resetBtn" class="ghost">Reset all settings</button>
+      </details>
+    </aside>
+
+    <main class="stage">
+      <div class="toolbar">
+        <div class="tabs" role="tablist">
+          <button role="tab" data-mode="realistic" class="active">Stitched</button>
+          <button role="tab" data-mode="paths">Stitch paths</button>
+          <button role="tab" data-mode="map">Colour map</button>
+          <button role="tab" data-mode="original">Original</button>
+        </div>
+        <div class="tools">
+          <label class="check small" id="underlayToggle" hidden><input id="showUnderlay" type="checkbox" checked> Underlay</label>
+          <label class="check small" id="jumpToggle" hidden><input id="showJumps" type="checkbox" checked> Jumps</label>
+          <label class="fabric" title="Fabric colour">Fabric <input id="fabric" type="color" value="#f4f1ea"></label>
+          <button class="icon" id="zoomOut" title="Zoom out">−</button>
+          <button class="icon" id="zoomFit" title="Fit">⤢</button>
+          <button class="icon" id="zoomIn" title="Zoom in">+</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas"></canvas>
+        <div id="empty" class="empty">
+          <div>
+            <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M14 44l12-14 9 10 6-7 9 11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="42" cy="24" r="4" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+            <p>Drop an image anywhere to convert it into an embroidery file</p>
+          </div>
+        </div>
+        <div id="busy" class="busy" hidden><div class="spinner"></div><span id="busyText">Working…</span></div>
+      </div>
+
+      <p class="tip">Tip: click a shape to skip it or bring it back · click an enclosed gap to stitch it · scroll to zoom, drag to pan</p>
+      <div class="playbar">
+        <button id="playBtn" class="icon" title="Simulate stitch-out" disabled>▶</button>
+        <input id="progress" type="range" min="0" max="100" value="100" disabled>
+        <span id="progressText" class="mono">—</span>
+      </div>
+
+      <div class="stats" id="stats">
+        <div><span>Design size</span><strong id="stSize">—</strong></div>
+        <div><span>Stitches</span><strong id="stStitches">—</strong></div>
+        <div><span>Colours / stops</span><strong id="stColors">—</strong></div>
+        <div title="Each trim starts a new stitch run; embroidery software (e.g. Hatch) lists each run as a sequence item"><span>Trims / runs</span><strong id="stTrims">—</strong></div>
+        <div><span>Shapes</span><strong id="stShapes">—</strong></div>
+        <div><span>Sew time</span><strong id="stTime">—</strong></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/palette.js"></script>
+  <script src="js/imageproc.js"></script>
+  <script src="js/pes.js"></script>
+  <script src="js/region.js"></script>
+  <script src="js/fill.js"></script>
+  <script src="js/satin.js"></script>
+  <script src="js/digitize.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
