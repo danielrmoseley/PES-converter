@@ -3,7 +3,9 @@
   'use strict';
   const D = E.digitize;
   const $ = (id) => document.getElementById(id);
-  const STORE = 'pes-converter-settings-v1';
+  // Settings are only kept if the user opts in ("Remember my settings on this device").
+  // Images and designs are never stored anywhere.
+  const STORE = 'stitchitizer-settings-v1';
 
   // settings grouped by which pipeline stage they invalidate
   const IMAGE_KEYS = ['colors', 'mergeSimilar', 'foldTinyColors', 'mergeBlends', 'background', 'snapToThreads', 'smoothing', 'minRegion'];
@@ -43,14 +45,21 @@
     const out = $(key + 'Out');
     if (out) out.textContent = (FORMAT[key] || String)(readInput(key));
   }
+  let remember = false;
   function save() {
+    if (!remember) return;
     try { localStorage.setItem(STORE, JSON.stringify(state.settings)); } catch (e) { /* private mode */ }
+  }
+  function forget() {
+    try { localStorage.removeItem(STORE); localStorage.removeItem('pes-converter-settings-v1'); } catch (e) { /* ignore */ }
   }
   function load() {
     try {
       const s = JSON.parse(localStorage.getItem(STORE) || 'null');
-      if (s) Object.assign(state.settings, s);
+      if (s) { Object.assign(state.settings, s); remember = true; }
+      localStorage.removeItem('pes-converter-settings-v1'); // drop data from the pre-opt-in version
     } catch (e) { /* ignore */ }
+    $('rememberSettings').checked = remember;
     for (const k of [...IMAGE_KEYS, ...STITCH_KEYS, ...ASM_KEYS, 'widthMM', 'hoop']) writeInput(k, state.settings[k]);
   }
 
@@ -83,9 +92,13 @@
       syncHeight(); save(); schedule('analyze');
     });
     $('hoop').addEventListener('change', () => { state.settings.hoop = $('hoop').value; save(); updateHoop(); });
+    $('rememberSettings').addEventListener('change', (e) => {
+      remember = e.target.checked;
+      if (remember) { save(); setStatus('Settings will be remembered on this device'); } else { forget(); setStatus('Saved settings removed from this device'); }
+    });
     $('resetBtn').addEventListener('click', () => {
       state.settings = Object.assign({}, D.DEFAULTS, { widthMM: 100, hoop: '130x180' });
-      try { localStorage.removeItem(STORE); } catch (e) { /* ignore */ }
+      forget();
       load(); computeCrop(); schedule('analyze');
     });
   }

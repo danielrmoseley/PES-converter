@@ -30,6 +30,12 @@ body {
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 16px; color: var(--accent); }
 .brand span { color: var(--ink); }
 .brand small { color: var(--muted); font-weight: 400; font-size: 13px; }
+.brand img { display: block; border-radius: 6px; }
+.brand .private {
+  display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; padding: 3px 9px;
+  font-size: 12px; font-weight: 500; color: #1d6b3a; background: #e8f5ec; border: 1px solid #c4e5cf; border-radius: 999px;
+}
+@media (max-width: 900px) { .brand small, .brand .private { display: none; } }
 .top-actions { display: flex; gap: 14px; align-items: center; }
 .status { color: var(--muted); font-size: 13px; }
 
@@ -73,6 +79,7 @@ label.check.small { margin: 0; font-size: 13px; color: var(--muted); }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .row2 label { margin-top: 0; }
 .hint { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
+.rights { color: var(--muted); font-size: 11.5px; line-height: 1.4; margin: 8px 0 0; padding: 7px 9px; background: var(--bg); border: 1px solid var(--line); border-radius: 7px; }
 .warn { color: #9a3412; background: #fff1e6; border: 1px solid #fed7aa; border-radius: 7px; padding: 6px 8px; font-size: 12px; margin: 6px 0 0; }
 
 .drop {

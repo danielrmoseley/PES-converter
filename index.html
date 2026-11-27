@@ -3,15 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Image → PES Embroidery Converter</title>
+  <!-- Privacy by construction: the page may only load its own files and can never send data anywhere
+       (connect-src 'none', no forms, no external resources). Images are processed in the browser. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; worker-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Stitchitizer — turn images into embroidery files, privately in your browser</title>
+  <meta name="description" content="Convert PNG, JPEG or SVG images into Brother PES embroidery files with tatami fill and satin stitches. Everything runs in your browser — your images are never uploaded or stored.">
+  <meta name="theme-color" content="#b4235a">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Stitchitizer — image to embroidery, privately in your browser">
+  <meta property="og:description" content="Turn PNG, JPEG or SVG artwork into Brother PES embroidery files. Nothing is uploaded: all processing happens on your device.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12c3-6 6-6 9 0s6 6 9 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2.2"/><circle cx="21" cy="12" r="1.6" fill="currentColor"/></svg>
-      <span>Image → PES</span>
-      <small>embroidery digitizer</small>
+      <img src="assets/favicon.svg" width="26" height="26" alt="">
+      <span>Stitchitizer</span>
+      <small>image → PES embroidery</small>
+      <span class="private" title="Images are processed entirely on your device. Nothing is uploaded, and nothing is stored unless you ask the app to remember your settings.">
+        <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M7 11V8a5 5 0 0110 0v3M6 11h12v9H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        Runs in your browser · nothing is uploaded
+      </span>
     </div>
     <div class="top-actions">
       <span id="status" class="status">Load an image to begin</span>
@@ -34,6 +51,7 @@
           </div>
         </label>
         <p class="hint">Works best with logos, clip-art and drawings with clear, flat colours. SVGs give the cleanest edges. Photos are posterised.</p>
+        <p class="rights">You are responsible for having the rights to any image you convert. Characters, logos and artwork you didn't create are usually protected by copyright or trademark, so check you have permission before stitching or selling designs made from them.</p>
       </section>
 
       <section class="panel">
@@ -133,6 +151,7 @@
         <label class="slider">Trim jumps longer than <output id="trimDistanceOut">1.0 mm</output>
           <input id="trimDistance" type="range" min="0.5" max="10" step="0.5" value="1"></label>
         <label class="check"><input id="ties" type="checkbox" checked> Lock (tie) stitches at start/end</label>
+        <label class="check"><input id="rememberSettings" type="checkbox"> Remember my settings on this device</label>
         <button id="resetBtn" class="ghost">Reset all settings</button>
       </details>
     </aside>

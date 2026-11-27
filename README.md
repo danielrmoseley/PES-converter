@@ -138,6 +138,10 @@ python3 tools/validate_pes.py /tmp/test.pes /tmp/test.png 8
 
 During development, files from the app were checked against `pyembroidery`: re-encoding the same stitches with its PES v1 writer produces byte-identical output, including the `CEmbOne`/`CSewSeg` blocks, the PEC stitch stream and the thumbnails.
 
+## Image rights
+
+Users are responsible for having the rights to any image they convert. Characters, logos and artwork you didn't create are usually protected by copyright or trademark. Check you have permission before stitching or selling designs made from them. The app shows this notice under the image upload area.
+
 ## Limitations
 
 - **Thread colours.** PES v1 stores colours as Brother chart indices. If you turn off "Snap to Brother thread chart", the file still records the nearest chart thread.
