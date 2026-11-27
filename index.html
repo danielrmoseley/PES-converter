@@ -22,8 +22,8 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <img src="assets/favicon.svg" width="26" height="26" alt="">
-      <span>Stitchitizer</span>
+      <img src="assets/logo-mark.svg" width="30" height="30" alt="">
+      <span class="wordmark">Stitch<em>itizer</em></span>
       <small>image → PES embroidery</small>
       <span class="private" title="Images are processed entirely on your device. Nothing is uploaded, and nothing is stored unless you ask the app to remember your settings.">
         <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M7 11V8a5 5 0 0110 0v3M6 11h12v9H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -178,8 +178,10 @@
         <canvas id="canvas"></canvas>
         <div id="empty" class="empty">
           <div>
-            <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M14 44l12-14 9 10 6-7 9 11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="42" cy="24" r="4" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
-            <p>Drop an image anywhere to convert it into an embroidery file</p>
+            <img src="assets/logo-mark.svg" width="72" height="72" alt="">
+            <p class="empty-title">Turn your artwork into an embroidery file</p>
+            <p>Drop a PNG, JPEG or SVG anywhere, or paste one from the clipboard.</p>
+            <p class="empty-private">Your image never leaves your device — all processing happens in this browser tab.</p>
           </div>
         </div>
         <div id="busy" class="busy" hidden><div class="spinner"></div><span id="busyText">Working…</span></div>

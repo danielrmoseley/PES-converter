@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# local test output
+*.pes
+_site/
+node_modules/
+
+# local Claude Code settings
+.claude/settings.local.json

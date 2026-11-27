@@ -30,7 +30,9 @@ body {
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 16px; color: var(--accent); }
 .brand span { color: var(--ink); }
 .brand small { color: var(--muted); font-weight: 400; font-size: 13px; }
-.brand img { display: block; border-radius: 6px; }
+.brand img { display: block; }
+.brand .wordmark { font-size: 19px; font-weight: 750; letter-spacing: -0.3px; color: var(--ink); }
+.brand .wordmark em { font-style: normal; color: var(--accent); }
 .brand .private {
   display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; padding: 3px 9px;
   font-size: 12px; font-weight: 500; color: #1d6b3a; background: #e8f5ec; border: 1px solid #c4e5cf; border-radius: 999px;
@@ -117,7 +119,10 @@ label.check.small { margin: 0; font-size: 13px; color: var(--muted); }
 canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 canvas.dragging { cursor: grabbing; }
 .empty { position: absolute; inset: 0; display: grid; place-items: center; color: #a6a39a; text-align: center; pointer-events: none; }
-.empty p { margin: 10px 0 0; }
+.empty p { margin: 6px 0 0; }
+.empty img { opacity: .9; }
+.empty .empty-title { margin-top: 14px; font-size: 17px; font-weight: 650; color: #6b6860; }
+.empty .empty-private { margin-top: 12px; font-size: 12.5px; color: #1d6b3a; }
 .busy {
   position: absolute; left: 50%; top: 16px; transform: translateX(-50%);
   display: flex; gap: 10px; align-items: center; background: rgba(31,35,40,.88); color: #fff;

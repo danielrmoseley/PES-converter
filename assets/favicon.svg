@@ -1,6 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#b4235a"/>
-  <path d="M10 38c7-14 14-14 22 0s15 14 22 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-dasharray="7 5"/>
-  <path d="M47 10l7 7-18 18-9 2 2-9z" fill="#fff" opacity=".95"/>
-  <circle cx="50.5" cy="13.5" r="2.2" fill="#b4235a"/>
+  <title>Stitchitizer</title>
+  <rect width="64" height="64" rx="15" fill="#b4235a"/>
+  <!-- a running-stitch "S": the thread path a needle leaves -->
+  <path d="M43 19.5c-3.2-3.6-8-5.5-12.8-5-5.6.6-9.7 4.4-9.6 9.2.1 5.6 5.5 7.3 10.6 8.6 5.6 1.4 11.2 3 11.4 9.1.2 5.4-4.6 9.4-10.6 9.7-5.3.3-10.2-1.8-13.4-5.6"
+        fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-dasharray="5.4 5.2"/>
+  <!-- needle -->
+  <g transform="rotate(45 49 47)">
+    <rect x="47.2" y="35" width="3.6" height="22" rx="1.8" fill="#ffd6e5"/>
+    <path d="M47.2 55.5h3.6L49 61z" fill="#ffd6e5"/>
+    <rect x="48.2" y="37" width="1.6" height="5" rx=".8" fill="#b4235a"/>
+  </g>
 </svg>

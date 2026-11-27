@@ -1,20 +1,33 @@
-# Image → PES embroidery converter
+# Stitchitizer
 
-A browser app that turns a PNG, JPEG or SVG into a Brother **.pes** embroidery file. Everything runs on your machine in the browser. There's no server, no build step and no dependencies.
+**Turn PNG, JPEG or SVG artwork into Brother `.pes` embroidery files, privately in your browser.**
 
-## Run it
+Everything runs in the browser tab: there is no server, nothing is uploaded, and images and designs are never stored. The page's Content Security Policy forbids it from sending data anywhere (`connect-src 'none'`). Settings are only remembered if you tick "Remember my settings on this device".
 
-Open `index.html` in Chrome, Edge, Firefox or Safari. Double-clicking the file works. You can also serve the folder:
+## Use it
 
-```sh
-python3 -m http.server 8000   # then visit http://localhost:8000
-```
+- **Online:** the GitHub Pages site for this repository (see *Publishing* below).
+- **Locally:** open `index.html` in Chrome, Edge, Firefox or Safari (double-clicking works), or serve the folder:
+
+  ```sh
+  python3 -m http.server 8000   # then visit http://localhost:8000
+  ```
 
 Then drop, paste or browse for an image, set the size in mm and click **Download .pes**.
 
 Click any shape in the preview to skip it or bring it back. Clicking an enclosed gap (for example between two arms) makes it stitched.
 
 The app works best with logos, clip-art, lettering and flat-colour drawings. SVGs give the cleanest edges, because the vector is rasterised at exactly the resolution the digitizer needs. Photos get posterised into a few thread colours.
+
+## Publishing (GitHub Pages)
+
+The site is static and has no build step. `.github/workflows/pages.yml` deploys it on every push to `main`. It does three things:
+
+1. Runs a headless smoke test of the digitizing pipeline. A broken build never deploys.
+2. Publishes only `index.html`, `css/`, `js/` and `assets/`.
+3. Points the link-preview image at the site's absolute URL.
+
+One-time setup: in the repository on GitHub, go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**. After the first push, the site appears at `https://<user>.github.io/<repo>/`.
 
 ## What it does
 
@@ -87,7 +100,9 @@ To move around, scroll to zoom, drag to pan and double-click to fit.
 ## Project layout
 
 ```
-index.html            UI shell
+index.html            UI shell (with Content Security Policy)
+assets/               logo, favicon, link-preview image
+.github/workflows/    GitHub Pages deploy (test + publish)
 css/style.css
 js/palette.js         Brother thread chart, Lab colour conversion
 js/imageproc.js       quantisation, cleanup, components, distance transform, contours, skeleton
