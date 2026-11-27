@@ -5,7 +5,7 @@
   const $ = (id) => document.getElementById(id);
   // Settings are only kept if the user opts in ("Remember my settings on this device").
   // Images and designs are never stored anywhere.
-  const STORE = 'stitchitizer-settings-v1';
+  const STORE = 'pes-converter-settings-v2';
 
   // settings grouped by which pipeline stage they invalidate
   const IMAGE_KEYS = ['colors', 'mergeSimilar', 'foldTinyColors', 'mergeBlends', 'background', 'snapToThreads', 'smoothing', 'minRegion'];
@@ -51,13 +51,13 @@
     try { localStorage.setItem(STORE, JSON.stringify(state.settings)); } catch (e) { /* private mode */ }
   }
   function forget() {
-    try { localStorage.removeItem(STORE); localStorage.removeItem('pes-converter-settings-v1'); } catch (e) { /* ignore */ }
+    try { for (const k of [STORE, 'pes-converter-settings-v1', 'stitchitizer-settings-v1', 'threadwise-settings-v1']) localStorage.removeItem(k); } catch (e) { /* ignore */ }
   }
   function load() {
     try {
       const s = JSON.parse(localStorage.getItem(STORE) || 'null');
       if (s) { Object.assign(state.settings, s); remember = true; }
-      localStorage.removeItem('pes-converter-settings-v1'); // drop data from the pre-opt-in version
+      for (const old of ['pes-converter-settings-v1', 'stitchitizer-settings-v1', 'threadwise-settings-v1']) localStorage.removeItem(old); // drop data saved under earlier names
     } catch (e) { /* ignore */ }
     $('rememberSettings').checked = remember;
     for (const k of [...IMAGE_KEYS, ...STITCH_KEYS, ...ASM_KEYS, 'widthMM', 'hoop']) writeInput(k, state.settings[k]);

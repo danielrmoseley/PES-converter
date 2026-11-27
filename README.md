@@ -1,4 +1,4 @@
-# Stitchitizer
+# PES Converter
 
 **Turn PNG, JPEG or SVG artwork into Brother `.pes` embroidery files, privately in your browser.**
 
