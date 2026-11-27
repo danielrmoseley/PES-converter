@@ -75,23 +75,55 @@
         this.cam.x = wx - mx / this.cam.s; this.cam.y = wy - my / this.cam.s;
         this.draw();
       }, { passive: false });
-      let down = null;
-      cv.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY }; down = { x: e.clientX, y: e.clientY }; cv.setPointerCapture(e.pointerId); cv.classList.add('dragging'); });
-      cv.addEventListener('pointermove', (e) => {
-        if (!drag || !this.cam) return;
-        this.cam.x -= (e.clientX - drag.x) / this.cam.s; this.cam.y -= (e.clientY - drag.y) / this.cam.s;
-        drag = { x: e.clientX, y: e.clientY };
-        this.draw();
-      });
-      const end = () => { drag = null; cv.classList.remove('dragging'); };
-      cv.addEventListener('pointerup', (e) => {
-        // a click (no drag) picks the shape under the cursor
-        if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 4 && this.cam && this.onPick && this.mode !== 'original') {
-          const r = cv.getBoundingClientRect();
-          this.onPick((e.clientX - r.left) / this.cam.s + this.cam.x, (e.clientY - r.top) / this.cam.s + this.cam.y);
+      // pointer handling: one pointer pans (and a tap picks a shape); two pointers pinch-zoom + pan
+      const pts = new Map();
+      let down = null, pinch = null, gestured = false;
+      const local = (e) => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+      const pinchState = () => {
+        const [a, b] = [...pts.values()];
+        return { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+      };
+      cv.addEventListener('pointerdown', (e) => {
+        cv.setPointerCapture(e.pointerId);
+        pts.set(e.pointerId, local(e));
+        if (pts.size === 1) { drag = local(e); down = local(e); gestured = false; cv.classList.add('dragging'); }
+        if (pts.size === 2 && this.cam) {
+          const st = pinchState();
+          pinch = { d0: st.d, s0: this.cam.s, wx: st.mx / this.cam.s + this.cam.x, wy: st.my / this.cam.s + this.cam.y };
+          gestured = true; drag = null;
         }
-        down = null;
-        end();
+      });
+      cv.addEventListener('pointermove', (e) => {
+        if (!pts.has(e.pointerId) || !this.cam) return;
+        pts.set(e.pointerId, local(e));
+        if (pinch && pts.size >= 2) {
+          // zoom about the gesture's start point, and let the midpoint carry the pan
+          const st = pinchState();
+          this.cam.s = Math.max(0.5, Math.min(200, pinch.s0 * st.d / pinch.d0));
+          this.cam.x = pinch.wx - st.mx / this.cam.s; this.cam.y = pinch.wy - st.my / this.cam.s;
+          this.draw();
+        } else if (drag) {
+          const p = local(e);
+          this.cam.x -= (p.x - drag.x) / this.cam.s; this.cam.y -= (p.y - drag.y) / this.cam.s;
+          drag = p;
+          if (down && Math.hypot(p.x - down.x, p.y - down.y) >= 6) gestured = true;
+          this.draw();
+        }
+      });
+      const end = (e) => {
+        pts.delete(e.pointerId);
+        if (pts.size < 2) pinch = null;
+        if (pts.size === 1) drag = [...pts.values()][0]; // keep panning with the remaining finger
+        if (!pts.size) { drag = null; cv.classList.remove('dragging'); }
+      };
+      cv.addEventListener('pointerup', (e) => {
+        // a tap / click (no drag, no pinch) picks the shape under the pointer
+        if (pts.size === 1 && down && !gestured && this.cam && this.onPick && this.mode !== 'original') {
+          const p = local(e);
+          this.onPick(p.x / this.cam.s + this.cam.x, p.y / this.cam.s + this.cam.y);
+        }
+        if (pts.size === 1) down = null;
+        end(e);
       });
       cv.addEventListener('pointercancel', end);
       cv.addEventListener('dblclick', () => this.fit());

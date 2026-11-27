@@ -123,7 +123,7 @@
     state.source = img;
     state.name = file.name.replace(/\.[^.]+$/, '') || 'design';
     $('thumb').src = url; $('thumb').hidden = false;
-    $('dropText').innerHTML = '<strong>' + escapeHtml(file.name) + '</strong><br><span>' + img.naturalWidth + ' × ' + img.naturalHeight + ' px · click to replace</span>';
+    $('dropText').innerHTML = '<strong>' + escapeHtml(file.name) + '</strong><br><span>' + img.naturalWidth + ' × ' + img.naturalHeight + ' px · ' + (matchMedia('(hover: none)').matches ? 'tap' : 'click') + ' to replace</span>';
     $('empty').hidden = true;
     detectCrop();
     computeCrop();

@@ -34,20 +34,20 @@
       <span id="status" class="status">Load an image to begin</span>
       <button id="downloadBtn" class="primary" disabled>
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Download .pes
+        <span>Download</span><span class="dl-ext">.pes</span>
       </button>
     </div>
   </header>
 
   <div class="layout">
     <aside class="sidebar">
-      <section class="panel">
+      <section class="panel panel-image">
         <h2>Image</h2>
         <label id="drop" class="drop">
           <input id="file" type="file" accept="image/png,image/jpeg,image/svg+xml,.svg,image/webp,image/gif,image/bmp" hidden>
           <div class="drop-inner">
             <img id="thumb" alt="" hidden>
-            <div id="dropText"><strong>Drop a PNG, JPEG or SVG</strong><br><span>or click to browse</span></div>
+            <div id="dropText"><strong class="mouse-only">Drop a PNG, JPEG or SVG</strong><strong class="touch-only">Choose a PNG, JPEG or SVG</strong><br><span class="mouse-only">or click to browse</span><span class="touch-only">from your photos or files</span></div>
           </div>
         </label>
         <p class="hint">Works best with logos, clip-art and drawings with clear, flat colours. SVGs give the cleanest edges. Photos are posterised.</p>
@@ -180,14 +180,15 @@
           <div>
             <img src="assets/logo-mark.svg" width="72" height="72" alt="">
             <p class="empty-title">Turn your artwork into an embroidery file</p>
-            <p>Drop a PNG, JPEG or SVG anywhere, or paste one from the clipboard.</p>
+            <p class="mouse-only">Drop a PNG, JPEG or SVG anywhere, or paste one from the clipboard.</p>
+            <p class="touch-only">Choose an image above to get started.</p>
             <p class="empty-private">Your image never leaves your device — all processing happens in this browser tab.</p>
           </div>
         </div>
         <div id="busy" class="busy" hidden><div class="spinner"></div><span id="busyText">Working…</span></div>
       </div>
 
-      <p class="tip">Tip: click a shape to skip it or bring it back · click an enclosed gap to stitch it · scroll to zoom, drag to pan</p>
+      <p class="tip"><span class="mouse-only">Tip: click a shape to skip it or bring it back · click an enclosed gap to stitch it · scroll to zoom, drag to pan</span><span class="touch-only">Tip: tap a shape to skip it or bring it back · pinch to zoom, drag to pan</span></p>
       <div class="playbar">
         <button id="playBtn" class="icon" title="Simulate stitch-out" disabled>▶</button>
         <input id="progress" type="range" min="0" max="100" value="100" disabled>

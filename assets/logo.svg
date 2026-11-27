@@ -2,19 +2,22 @@
   <title>PES Converter</title>
   <g transform="translate(4 4)">
   <rect width="64" height="64" rx="15" fill="#b4235a"/>
-  <!-- a running-stitch wave: individual stitches with needle holes between them -->
-  <g fill="none" stroke="#fff" stroke-width="3.9" stroke-linecap="round">
-    <path d="M10.59 35.09Q11.81 32.90 13.24 30.85"/>
-    <path d="M16.10 27.80Q18.43 26.17 20.73 27.86"/>
-    <path d="M23.57 30.93Q24.99 32.99 26.21 35.17"/>
-    <path d="M28.29 38.83Q29.51 41.01 30.93 43.07"/>
-    <path d="M33.77 46.14Q36.07 47.83 38.40 46.20"/>
-    <path d="M41.26 43.15Q42.69 41.10 43.91 38.91"/>
+  <g fill="none" stroke="#fff" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round" transform="translate(5.6 4.4) scale(0.83)">
+    <path d="M10.5 38V15.5h6.2a5.6 5.6 0 0 1 0 11.2h-6.2"/>
+    <path d="M36 15.5h-9.5V38H36M26.5 26.8h8"/>
+    <path transform="translate(2.2 0)" d="M53.5 18.2a6.2 6.2 0 0 0-5.3-2.7c-3.4 0-5.9 2-5.9 4.8 0 6.3 11.6 4.1 11.6 11 0 3.1-2.7 5.1-6.2 5.1-2.5 0-4.6-1-6-2.8"/>
   </g>
-  <g transform="translate(48.60 34.80) rotate(30)">
+  <!-- running-stitch thread and needle -->
+  <g stroke="#ffd6e5" stroke-width="3.2" stroke-linecap="round">
+    <path d="M9.5 50.45L14.5 49.74"/>
+    <path d="M18.1 49.04L23.1 48.50"/>
+    <path d="M26.7 48.69L31.7 49.56"/>
+    <path d="M35.3 50.20L40.3 50.48"/>
+  </g>
+  <g transform="translate(47.5 50.2) rotate(-62)">
     <path d="M0 0l-1.5 -4.6h3z" fill="#ffd6e5"/>
-    <rect x="-1.5" y="-19" width="3" height="14.8" rx="1.5" fill="#ffd6e5"/>
-    <rect x="-0.75" y="-17.2" width="1.5" height="4" rx=".75" fill="#b4235a"/>
+    <rect x="-1.5" y="-17" width="3" height="12.8" rx="1.5" fill="#ffd6e5"/>
+    <rect x="-0.75" y="-15.3" width="1.5" height="3.8" rx=".75" fill="#b4235a"/>
   </g>
   </g>
   <text x="84" y="45" font-family="ui-rounded, 'SF Pro Rounded', 'Nunito', 'Segoe UI', system-ui, sans-serif" font-size="34" font-weight="750" letter-spacing="-0.6" fill="#1f2328">PES <tspan fill="#b4235a">Converter</tspan></text>
